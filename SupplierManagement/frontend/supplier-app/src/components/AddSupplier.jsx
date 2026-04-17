@@ -2,6 +2,17 @@ import { useState } from 'react';
 import supplierService from '../services/supplierService';
 import { toast } from 'react-toastify';
 
+function SectionIcon() {
+    return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M12 3a.75.75 0 0 1 .75.75v7.5h7.5a.75.75 0 0 1 0 1.5h-7.5v7.5a.75.75 0 0 1-1.5 0v-7.5h-7.5a.75.75 0 0 1 0-1.5h7.5v-7.5A.75.75 0 0 1 12 3Z"
+                fill="currentColor"
+            />
+        </svg>
+    );
+}
+
 function AddSupplier() {
     const [supplierCode, setSupplierCode] = useState('');
     const [companyName, setCompanyName] = useState('');
@@ -19,7 +30,7 @@ function AddSupplier() {
         setIsLoading(true);
         try {
             await supplierService.addSupplier({
-                supplierCode: parseInt(supplierCode),
+                supplierCode: parseInt(supplierCode, 10),
                 companyName: companyName.trim(),
                 telephoneNo: telephoneNo.trim()
             });
@@ -38,35 +49,46 @@ function AddSupplier() {
     return (
         <div className="page-container">
             <div className="card">
-                <h2 className="card-title">Add New Supplier</h2>
-                <p className="card-description">
-                    Enter the supplier details below to add them to the database.
-                </p>
+                <div className="card-header">
+                    <h2 className="card-title">
+                        <span className="heading-icon">
+                            <SectionIcon />
+                        </span>
+                        Add New Supplier
+                    </h2>
+                    <p className="card-description">
+                        Enter the supplier details below to add them to the database.
+                    </p>
+                </div>
+
                 <form onSubmit={handleSubmit} className="form">
-                    <div className="form-group">
-                        <label htmlFor="supplierCode">Supplier Code</label>
-                        <input
-                            type="number"
-                            id="supplierCode"
-                            value={supplierCode}
-                            onChange={(e) => setSupplierCode(e.target.value)}
-                            placeholder="e.g. 939"
-                            required
-                            disabled={isLoading}
-                        />
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label htmlFor="supplierCode">Supplier Code</label>
+                            <input
+                                type="number"
+                                id="supplierCode"
+                                value={supplierCode}
+                                onChange={(e) => setSupplierCode(e.target.value)}
+                                placeholder="e.g. 939"
+                                required
+                                disabled={isLoading}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="companyName">Company Name</label>
+                            <input
+                                type="text"
+                                id="companyName"
+                                value={companyName}
+                                onChange={(e) => setCompanyName(e.target.value)}
+                                placeholder="e.g. Focus Rooms (Pty) Ltd"
+                                required
+                                disabled={isLoading}
+                            />
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="companyName">Company Name</label>
-                        <input
-                            type="text"
-                            id="companyName"
-                            value={companyName}
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            placeholder="e.g. Focus Rooms (Pty) Ltd"
-                            required
-                            disabled={isLoading}
-                        />
-                    </div>
+
                     <div className="form-group">
                         <label htmlFor="telephoneNo">Telephone Number</label>
                         <input
@@ -79,9 +101,11 @@ function AddSupplier() {
                             disabled={isLoading}
                         />
                     </div>
+
                     <button type="submit" className="btn btn-primary" disabled={isLoading}>
                         {isLoading ? 'Adding...' : 'Add Supplier'}
                     </button>
+                    {isLoading && <p className="form-status">Saving supplier record...</p>}
                 </form>
             </div>
         </div>
