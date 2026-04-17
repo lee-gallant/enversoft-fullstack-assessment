@@ -1,0 +1,76 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong!Pass123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"YourStrong!Pass123\" -C -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  sql-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    volumes:
+      - ./SupplierManagement/docker/init.sql:/init/init.sql:ro
+    command:
+      [
+        "/opt/mssql-tools18/bin/sqlcmd",
+        "-S",
+        "sqlserver",
+        "-U",
+        "sa",
+        "-P",
+        "YourStrong!Pass123",
+        "-C",
+        "-i",
+        "/init/init.sql"
+      ]
+    restart: "no"
+
+  backend:
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    platform: linux/amd64
+    depends_on:
+      sql-init:
+        condition: service_completed_successfully
+    working_dir: /src
+    volumes:
+      - ./SupplierManagement/backend/SupplierManagement.API:/src
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://0.0.0.0:5163
+      ConnectionStrings__DefaultConnection: Server=sqlserver;Database=SupplierDB;User Id=sa;Password=YourStrong!Pass123;TrustServerCertificate=true;
+    command: >
+      bash -lc "dotnet restore && dotnet run --urls http://0.0.0.0:5163"
+    ports:
+      - "5163:5163"
+
+  frontend:
+    image: node:20-alpine
+    depends_on:
+      backend:
+        condition: service_started
+    working_dir: /app
+    volumes:
+      - ./SupplierManagement/frontend/supplier-app:/app
+      - supplier_node_modules:/app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    ports:
+      - "5173:5173"
+
+volumes:
+  sqlserver_data:
+  supplier_node_modules:

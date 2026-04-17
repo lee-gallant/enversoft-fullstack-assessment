@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5163/api/suppliers';
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:5163/api/suppliers';
 
 const supplierService = {
     addSupplier: async (supplierData) => {

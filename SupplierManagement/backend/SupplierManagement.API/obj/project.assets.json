@@ -3575,19 +3575,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/leoni.gallant/.nuget/packages/": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/leoni.gallant/Downloads/enversoft-fullstack-assessment/SupplierManagement/backend/SupplierManagement.API/SupplierManagement.API.csproj",
+      "projectUniqueName": "/src/SupplierManagement.API.csproj",
       "projectName": "SupplierManagement.API",
-      "projectPath": "/Users/leoni.gallant/Downloads/enversoft-fullstack-assessment/SupplierManagement/backend/SupplierManagement.API/SupplierManagement.API.csproj",
-      "packagesPath": "/Users/leoni.gallant/.nuget/packages/",
-      "outputPath": "/Users/leoni.gallant/Downloads/enversoft-fullstack-assessment/SupplierManagement/backend/SupplierManagement.API/obj/",
+      "projectPath": "/src/SupplierManagement.API.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/src/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/leoni.gallant/.nuget/NuGet/NuGet.Config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -3661,7 +3661,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

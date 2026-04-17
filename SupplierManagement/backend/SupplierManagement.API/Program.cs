@@ -22,9 +22,17 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy
+            .SetIsOriginAllowed(origin =>
+            {
+                if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                    return false;
+
+                return uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase)
+                    || uri.Host.Equals("127.0.0.1", StringComparison.OrdinalIgnoreCase);
+            })
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
